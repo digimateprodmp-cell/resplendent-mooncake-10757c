@@ -2308,14 +2308,17 @@ body.nav-drawer-open { overflow: hidden; }
 
 /* ---------- n8n chat widget (Phase 5) ----------
    Runs alongside the existing FAQ bubble (bottom-left) and the WhatsApp
-   sticky FAB (bottom-right, 22px/56px) — these variables are n8n's own
-   documented theming hooks, used here purely to shift its toggle button
-   up above the WhatsApp FAB so the two never overlap. */
+   sticky FAB (bottom-right, 22px/56px). Only the *closed* toggle pill gets
+   repositioned (so it doesn't sit on top of the WhatsApp FAB) — setting
+   --chat--window--bottom/right too, even to a small value, was quietly
+   breaking the *open* window's own height calculation and pushing its
+   input box out of the visible area (no scrollbar, just missing), on
+   desktop as well as mobile. The open window keeps n8n's own default
+   positioning entirely untouched, since it's a full panel, not a corner
+   widget, so it doesn't need to dodge the WhatsApp button anyway. */
 :root {
   --chat--toggle--right: 22px;
   --chat--toggle--bottom: 92px;
-  --chat--window--right: 22px;
-  --chat--window--bottom: 92px;
 }
 @media (max-width: 720px) {
   :root {
