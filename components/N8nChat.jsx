@@ -41,6 +41,17 @@ export default function N8nChat() {
           // Mirrors the trigger node's own "Initial Message(s)" field so the
           // greeting matches what's configured in n8n.
           initialMessages: ["Hi there! 👋", "How can I help you today?"],
+          // On mount the widget silently POSTs {action:"loadPreviousSession"}
+          // to the webhook before it'll show the input box. Our workflow is a
+          // custom AI Agent (not n8n's built-in chat handler), so it doesn't
+          // recognize that action — the call fails with no error surfaced,
+          // the widget never finishes starting a session, and it's left
+          // permanently stuck showing only the greeting + "Powered by n8n"
+          // footer with no way to actually type a message. Skipping the
+          // previous-session check makes it start a fresh session
+          // immediately every time, which is fine for a support widget like
+          // this (no real "resume my last chat" requirement).
+          loadPreviousSession: false,
         });
       })
       .catch((err) => {
